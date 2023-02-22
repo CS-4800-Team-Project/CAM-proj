@@ -1,17 +1,19 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-print("Are there problems in your life? (y/n)")
+@app.route('/question', methods=['GET'])
+def question():
+    return jsonify({'question': 'Are there problems in your life? (y/n)'})
 
-@app.route("/search/<yesorno>")
+@app.route("/answer/<yesorno>", methods=['POST'])
 def search_answer(yesorno):
     if yesorno == 'y':
-        print("Can you solve it?")
+        response = {'response': 'Can you solve it?'}
     elif yesorno == 'n':
-        print("Then don't worry!")
+        response = {'response': "Then don't worry!"}
     else:
-        print('Wrong input, please try again.')
-    return
+        response = {'error': 'Wrong input, please try again.'}
+    return jsonify(response)
 
 app.run(host = "0.0.0.0")
