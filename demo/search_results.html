@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Results</title>
+  </head>
+  <body>
+    <h1>Search Results</h1>
+    {% if results %}
+      <ul>
+        {% for result in results %}
+          <li>
+            <a href="{{ result[1] }}">{{ result[0] }}</a>
+            <ul>
+              <li>Rating: {{ result[2] }}</li>
+              <li>Reviews: {{ result[3] }}</li>
+              <li>Made it count: {{ result[4] }}</li>
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No results found.</p>
+    {% endif %}
+  </body>
+</html>
