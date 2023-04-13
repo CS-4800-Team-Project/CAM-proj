@@ -1,0 +1,41 @@
+name: 'Python CI with pip'
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - name: Install Flask
+      run: pip install flask
+        
+    - name: Copy Python file to EC2 via SSH Key
+      uses: appleboy/scp-action@v1
+      with:
+        host: "ec2-3-101-68-18.us-west-1.compute.amazonaws.com"
+        username: "ec2-user"
+        port: "22"
+        key: ${{ secrets.KEY }}
+        source: "demo/backend.py"
+        target: "~/backend.py"
+        
+    - name: Run Python file on EC2
+      uses: appleboy/ssh-action@v1
+      with:
+        host: "ec2-3-101-68-18.us-west-1.compute.amazonaws.com"
+        username: "ec2-user"
+        key: ${{ secrets.KEY }}
+        port: "22"
+        script: |
+          python3 ~demo/backend.py
