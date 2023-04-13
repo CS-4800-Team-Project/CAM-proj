@@ -23,9 +23,9 @@ jobs:
     - name: Copy Python file to EC2 via SSH Key
       uses: appleboy/scp-action@v1
       with:
-        host: "ec2-3-101-68-18.us-west-1.compute.amazonaws.com"
-        username: "ec2-user"
-        port: "22"
+        host: ec2-3-101-68-18.us-west-1.compute.amazonaws.com
+        username: ec2-user
+        port: 22
         key: ${{ secrets.KEY }}
         source: "demo/backend.py"
         target: "~/backend.py"
@@ -33,9 +33,9 @@ jobs:
     - name: Run Python file on EC2
       uses: appleboy/ssh-action@v1
       with:
-        host: "ec2-3-101-68-18.us-west-1.compute.amazonaws.com"
-        username: "ec2-user"
+        host: ec2-3-101-68-18.us-west-1.compute.amazonaws.com
+        username: ec2-user
         key: ${{ secrets.KEY }}
-        port: "22"
+        port: 22
         script: |
           python3 ~demo/backend.py
