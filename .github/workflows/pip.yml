@@ -39,9 +39,8 @@ jobs:
         port: 22
         script: |
           
-          pkill -f backend.py || true
-          cd /home/ec2-user
-          nohup python3 backend.py > backend.log 2>&1 &
+         pkill -f backend.py || true
+         nohup python3 demo/backend.py > demo/backend.log 2>&1 &
         
   
 
