@@ -38,7 +38,6 @@ jobs:
         key: ${{ secrets.KEY }} # added key
         port: 22
         script: |
-          
          pkill -f backend.py || true
          nohup python3 demo/backend.py > demo/backend.log 2>&1 &
         
