@@ -31,7 +31,7 @@ jobs:
         target: "~/backend.py"
         
     - name: Run Python file on EC2
-      uses: appleboy/ssh-action@v0.1.9
+      uses: appleboy/ssh-action@master
       with:
         host: ec2-54-219-93-151.us-west-1.compute.amazonaws.com
         username: ec2-user
