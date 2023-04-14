@@ -35,10 +35,13 @@ jobs:
       with:
         host: 54.219.93.151
         username: ec2-user
-        key: ${{ secrets.KEY }}
+        key: ${{ secrets.KEY }} # added key
         port: 22
         script: |
-          killall python3
-          python3 demo/backend.py
+          
+          pkill -f backend.py || true
+          cd demo
+          nohup python3 backend.py > backend.log 2>&1 &
+        
   
 
