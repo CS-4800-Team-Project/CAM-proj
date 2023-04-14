@@ -38,7 +38,6 @@ jobs:
         key: ${{ secrets.KEY }} # added key
         port: 22
         script: |
-          killall python3
           python3 Demo/backend.py
 
 
