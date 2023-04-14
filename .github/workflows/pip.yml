@@ -30,5 +30,15 @@ jobs:
         source: "Demo/backend.py"
         target: "~/backend.py"
         
+    - name: Run Python file on EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: 54.219.93.151
+        username: ec2-user
+        key: ${{ secrets.KEY }}
+        port: 22
+        script: |
+          killall python3
+          python3 demo/backend.py
   
 
