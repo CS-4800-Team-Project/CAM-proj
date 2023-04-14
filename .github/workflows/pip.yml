@@ -38,8 +38,8 @@ jobs:
         key: ${{ secrets.KEY }} # added key
         port: 22
         script: |
-         killall python3
-         nohup python3 CAM-proj/Demo/backend.py
-        
+         pkill -f backend.py || true
+         sudo kill $(sudo lsof -t -i:8080) || true
+         nohup python3 demo/backend.py > demo/backend.log 2>&1 &
   
 
