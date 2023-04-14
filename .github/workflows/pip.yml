@@ -39,5 +39,5 @@ jobs:
         port: 22
         script: |
           killall python3
-          nohup python3 CAM-proj/Demo/backend.py 
+          nohup python3 CAM-proj/Demo/backend.py &
 
