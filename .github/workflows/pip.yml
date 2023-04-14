@@ -27,7 +27,7 @@ jobs:
         username: ec2-user
         port: 22
         key: ${{ secrets.KEY }}
-        source: "CAM-proj/Demo/backend.py"
+        source: "Demo/backend.py"
         target: "~/backend.py"
         
     - name: Run Python file on EC2
