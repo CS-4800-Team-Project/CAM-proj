@@ -40,7 +40,7 @@ jobs:
         script: |
           
           pkill -f backend.py || true
-          cd demo
+          cd /home/ec2-user
           nohup python3 backend.py > backend.log 2>&1 &
         
   
