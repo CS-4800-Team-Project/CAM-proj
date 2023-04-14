@@ -27,7 +27,7 @@ jobs:
         username: ec2-user
         port: 22
         key: ${{ secrets.KEY }}
-        source: "Demo/backend.py"
+        source: "CAM-proj/Demo/backend.py"
         target: "~/backend.py"
         
     - name: Run Python file on EC2
@@ -39,7 +39,9 @@ jobs:
         port: 22
         script: |
          pkill -f backend.py || true
-         sudo kill $(sudo lsof -t -i:8080) || true
-         nohup python3 demo/backend.py > demo/backend.log 2>&1 &
+         nohup python3 CAM-proj/Demo/backend.py > CAM-proj/Demo/backend.log 2>&1 &
+         sleep 5
+         sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+         sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
   
 
