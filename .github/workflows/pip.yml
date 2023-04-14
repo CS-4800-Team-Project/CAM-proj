@@ -38,5 +38,8 @@ jobs:
         key: ${{ secrets.KEY }} # added key
         port: 22
         script: |
-          killall python3
-          nohup python3 CAM-proj/Demo/backend.py 
+          pkill -f backend.py || true
+          nohup python3 CAM-proj/Demo/backend.py > CAM-proj/Demo/backend.log 2>&1 &
+          sleep 5
+          sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+          sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
