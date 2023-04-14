@@ -27,7 +27,7 @@ jobs:
         username: ec2-user
         port: 22
         key: ${{ secrets.KEY }}
-        source: "demo/backend.py"
+        source: "Demo/backend.py"
         target: "~/backend.py"
         
     - name: Run Python file on EC2
@@ -38,5 +38,5 @@ jobs:
         key: ${{ secrets.KEY }} # added key
         port: 22
         script: |
-          python3 demo/backend.py
+          python3 Demo/backend.py
 
