@@ -1,14 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <head>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Search Results</title>
-  </head>
-  <body>
+</head>
+<body>
     <h1>Search Results</h1>
-    <ul>
-      {% for recipe in results %}
-      <li><a href="{{ recipe.url }}">{{ recipe.title }}</a> (Rating: {{ recipe.rating }}, Reviews: {{ recipe.reviews }})</li>
-      {% endfor %}
-    </ul>
-  </body>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Rating</th>
+                <th>Reviews</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr>
+                    <td><a href="/recipe/{{ result.id }}">{{ result.title }}</a></td>
+                    <td>{{ result.rating }}</td>
+                    <td>{{ result.reviews }}</td>
+                </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+    <a href="/">Back to search</a>
+</body>
 </html>
