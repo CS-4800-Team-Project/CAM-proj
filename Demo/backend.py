@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, jsonify, url_for, redirect
 import requests
 import openai
+import os
 
-# Replace your_api_key with your actual OpenAI API key
-openai.api_key = "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"
 
-app = Flask(__name__, template_folder="template")
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+
+app = Flask(__name__, template_folder="template", static_folder="static")
 
 API_KEY = '8101db824a1c4a8ea99f3e7f77e01a75'
 
@@ -72,7 +73,18 @@ def get_recipe_details(recipe_id):
     else:
         return None
 
+@app.route('/generated_recipe', methods=['GET'])
+def generated_recipe():
+    if request.args.get('ingredients'):
+        ingredients = request.args.get('ingredients').split(', ')
+        recipe = generate_recipe(ingredients)
+        bg_image = url_for('static', filename='Food.jpg')
+        return render_template('generated_recipe.html', recipe=recipe, bg_image=bg_image)
+    else:
+        return redirect(url_for('index'))
+
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
-
-
