@@ -40,6 +40,8 @@ jobs:
         script: |
           export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           killall python3
-          nohup python3 CAM-proj/Demo/backend.py &
+          nohup python3 CAM-proj/Demo/backend.py > backend.log 2>&1 &
+          sleep 5
+
 
 
