@@ -22,7 +22,7 @@ jobs:
     - name: Copy Python file to EC2 via SSH Key
       uses: appleboy/scp-action@master
       with:
-        host: 54.219.93.151
+        host: 54.67.87.41
         username: ec2-user
         port: 22
         key: ${{ secrets.KEY }}
@@ -32,7 +32,7 @@ jobs:
     - name: Run Python file on EC2
       uses: appleboy/ssh-action@master
       with:
-        host: 54.219.93.151
+        host: 54.67.87.41
         username: ec2-user
         key: ${{ secrets.KEY }} # added key
         port: 22
