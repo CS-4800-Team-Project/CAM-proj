@@ -34,9 +34,12 @@ jobs:
       with:
         host: 54.67.87.41
         username: ec2-user
-        key: ${{ secrets.KEY }} # added key
+        key: ${{ secrets.KEY }}
         port: 22
+        envs: OPENAI_API_KEY
         script: |
+          export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           killall python3
-          nohup python3 ~/backend.py > /dev/null 2>&1 &
+          nohup python3 CAM-proj/Demo/backend.py &
+
 
