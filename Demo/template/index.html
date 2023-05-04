@@ -12,7 +12,6 @@
         background-size: cover;
         background-color: rgba(0, 0, 0, 0.7);
       }
-
       #imageonly {
         position: absolute;
         top: 0;
@@ -21,58 +20,51 @@
         height: 100%;
         z-index: -1;
       }
-
       .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       }
-
       h1 {
         color: #fff;
-        text-align: center;
-        margin-top: 40px;
-        margin-bottom: 40px;
-        text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+	text-align: center;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
       }
-
       h2 {
         color: #000;
         margin: 0;
-        padding: 0;
-        text-align: center;
-        margin-top: 10px;
-        margin-bottom: 10px;
+	padding: 0;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
       }
-
       input[type="text"] {
         width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-        border: none;
-        margin-top: 20px;
-        font-size: 18px;
+	padding: 10px;
+	border-radius: 5px;
+	border: none;
+	margin-top: 20px;
+	font-size: 18px;
       }
-
       button[type="submit"] {
         background-color: #dc3545;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        font-size: 18px;
-        margin-top: 20px;
-        cursor: pointer;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	font-size: 18px;
+	margin-top: 20px;
+	cursor: pointer;
         transition: background-color 0.3s ease;
       }
-
       button[type="submit"]:hover {
         background-color: #c82333;
       }
-
       ul {
         list-style: none;
         padding: 0;
@@ -81,7 +73,6 @@
         flex-wrap: wrap;
         justify-content: center;
       }
-
       li {
         width: 25rem;
         margin: 1rem;
@@ -90,11 +81,9 @@
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.3s ease;
       }
-
-            li:hover {
+      li:hover {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
       }
-
       a {
         display: block;
         padding: 1rem;
@@ -104,49 +93,18 @@
         text-decoration: none;
         transition: color 0.3s ease;
       }
-
       a:hover {
         color: #555;
       }
-
       span {
         display: block;
         padding: 0.5rem 1rem;
         font-size: 1.25rem;
         color: #777;
       }
-      .logo {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        width: 350px; /* Adjust the width as needed */
-        height: auto;
-      }
-      .login {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background-color: rgba(255, 255, 255, 0.5);
-          color: #333;
-          padding: 3px;
-          border-radius: 3px;
-          text-decoration: none;
-      }
-
-
     </style>
   </head>
   <body>
-      <div class="header">
-        <img src="{{ logo_image }}" alt="Logo" class="logo">
-      </div>
-      <div class="login">
-        {% if current_user.is_authenticated %}
-            <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
-        {% else %}
-            <p><a href="{{ url_for('login') }}">Login</a></p>
-        {% endif %}
-      </div>
      <div id="imageonly"></div>
     <h1>Food Recipe Search</h1>
     <div class="container">
@@ -165,7 +123,6 @@
       </form>
     </div>
     <ul id="results_list"></ul>
-
     <script>
       // Set the background image using JavaScript
       const setBackgroundImage = () => {
@@ -177,28 +134,29 @@
         imageonlyDiv.style.backgroundAttachment = 'fixed';
       };
       setBackgroundImage();
-
       const BASE_URL = "http://54.219.93.151:8080";
       function displayResults(results) {
         console.log("displayResults called");
         const resultsList = document.getElementById("results_list");
         resultsList.innerHTML = "";
         const parsedResults = JSON.parse(results); // Parse the JSON data
-        const favoriteForm = document.createElement("form");
-        favoriteForm.action = `/favorite/${recipe.id}`;
-        favoriteForm.method = "post";
-        favoriteForm.style.display = "inline";
-
-        const favoriteButton = document.createElement("button");
-        favoriteButton.type = "submit";
-        favoriteButton.textContent = "Favorite";
-
-        favoriteForm.appendChild(favoriteButton);
-        li.appendChild(document.createElement("br"));
-        li.appendChild(favoriteForm);
+        for (let recipe of parsedResults) {
+          const li = document.createElement("li");
+          const title = document.createTextNode(recipe.title);
+          const url = document.createElement("a");
+          url.href = `/recipe/${recipe.id}`; // Update the URL to include the recipe_id
+          url.target = "_blank";
+          url.appendChild(title);
+          const rating = document.createTextNode(`Rating: ${recipe.rating}`);
+          const reviews = document.createTextNode(`Reviews: ${recipe.reviews}`);
+          li.appendChild(url);
+          li.appendChild(document.createElement("br"));
+          li.appendChild(rating);
+          li.appendChild(document.createElement("br"));
+          li.appendChild(reviews);
+          resultsList.appendChild(li);
         }
       }
-
       const searchForm = document.querySelector('form');
       searchForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -210,8 +168,6 @@
           })
           .catch(error => console.error(error));
       });
-
     </script>
   </body>
 </html>
-
