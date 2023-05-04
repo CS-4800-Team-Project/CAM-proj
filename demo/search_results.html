@@ -1,6 +1,9 @@
 <!DOCTYPE html>
+<!display for search results on app UI>
+
 <html>
   <head>
+    <!UI page header for results>
     <title>Search Results</title>
   </head>
   <body>
@@ -9,6 +12,7 @@
       <ul>
         {% for result in results %}
           <li>
+            <!display info found on search result: recipe, rating, reviews, num of users who have made recipe>
             <a href="{{ result[1] }}">{{ result[0] }}</a>
             <ul>
               <li>Rating: {{ result[2] }}</li>
@@ -18,6 +22,7 @@
           </li>
         {% endfor %}
       </ul>
+    <!display message for when no result found in database>
     {% else %}
       <p>No results found.</p>
     {% endif %}
