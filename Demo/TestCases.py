@@ -23,7 +23,7 @@ class TestApp(unittest.TestCase):
                     "title": "Test Recipe 2",
                     "href": "http://testrecipe2.com",
                     "rating": 3.8,
-                    "reviews": 5
+                    "reviews": 5 
                 }
             ]
         }
