@@ -57,12 +57,12 @@ def index():
         if 'search_query' in request.form:
             search_query = request.form['search_query']
             results = search_recipes(search_query)
-            return render_template('search_results.html', results=results, logo_image=logo_image)
+            return render_template('search_results.html', results=results, logo_image=logo_image, current_user=current_user)
         elif 'ingredients' in request.form:
             ingredients = request.form['ingredients'].split(', ')
             recipe = generate_recipe(ingredients)
-            return render_template('generated_recipe.html', recipe=recipe, logo_image=logo_image)
-    return render_template('index.html', logo_image=logo_image)
+            return render_template('generated_recipe.html', recipe=recipe, logo_image=logo_image, current_user=current_user)
+    return render_template('index.html', logo_image=logo_image, current_user=current_user)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -312,10 +312,6 @@ def get_profile_link():
         return url_for('profile')
     else:
         return url_for('login')
-
-@app.route("/")
-def index():
-    return render_template('index.html', current_user=current_user)
 
 
 if __name__ == '__main__':
