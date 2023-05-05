@@ -313,6 +313,10 @@ def get_profile_link():
     else:
         return url_for('login')
 
+@app.route("/")
+def index():
+    return render_template('index.html', current_user=current_user)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
