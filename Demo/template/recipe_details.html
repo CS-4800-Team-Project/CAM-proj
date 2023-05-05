@@ -42,8 +42,16 @@
             <p><strong>Step {{ step.number }}:</strong> {{ step.step }}</p>
         {% endfor %}
 
+        {% if current_user.is_authenticated %}
+            <form action="{{ url_for('rate_recipe', recipe_id=recipe.id) }}" method="post">
+                <label for="rating">Rate this recipe (1-5):</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" required>
+                <input type="submit" value="Rate">
+            </form>
+        {% else %}
+            <p><a href="{{ url_for('login') }}">Login</a> to rate this recipe.</p>
+        {% endif %}
         <a href="/">Back to search</a>
     </div>
 </body>
 </html>
-
