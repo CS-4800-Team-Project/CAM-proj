@@ -71,14 +71,14 @@ def search_recipes(query):
         return []
 
 def generate_recipe(ingredients):
-    prompt = f"Create a delicious recipe using the following ingredients: {', '.join(ingredients)}.\n\nRecipe:"
+    prompt = f"Create a delicious recipe using most the following ingredients, it is not necessarry to use all the ingridients use your best judgement: {', '.join(ingredients)}.\n\nRecipe:"
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
         max_tokens=150,
         n=1,
         stop=None,
-        temperature=0.7,
+        temperature=0.5,  # Adjust temperature, higher is more creative and random lower is more focused 
     )
 
     recipe = response.choices[0].text.strip()
