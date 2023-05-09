@@ -113,13 +113,13 @@
         display: block;
         padding: 0.5rem 1rem;
         font-size: 1.25rem;
-        color: #777;
+        color: #333;
       }
       .logo {
         position: absolute;
         top: 10px;
         left: 10px;
-        width: 350px; /* Adjust the width as needed */
+        width: 200px; /* Adjust the width as needed */
         height: auto;
       }
       .login {
@@ -140,13 +140,17 @@
       <div class="header">
         <img src="{{ logo_image }}" alt="Logo" class="logo">
       </div>
-      <div class="login">
-        {% if current_user.is_authenticated %}
-            <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
-        {% else %}
-            <p><a href="{{ url_for('login') }}">Login</a></p>
-        {% endif %}
-      </div>
+      <<div class="login">
+          {% if current_user.is_authenticated %}
+            <span>Welcome, {{ current_user.username }}!</span>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+          {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+          {% endif %}
+        </div>
+
+
      <div id="imageonly"></div>
     <h1>Food Recipe Search</h1>
     <div class="container">
