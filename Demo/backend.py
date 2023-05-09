@@ -25,12 +25,6 @@ def init_db():
                             last_recipe_generated TIMESTAMP,
                             recipes_generated_today INTEGER DEFAULT 0)''')
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        username TEXT UNIQUE NOT NULL,
-                        email TEXT UNIQUE NOT NULL,
-                        password TEXT NOT NULL)''')
-
     # Create ratings table
     cursor.execute('''CREATE TABLE IF NOT EXISTS ratings (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
