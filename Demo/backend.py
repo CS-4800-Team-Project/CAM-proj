@@ -78,7 +78,7 @@ def generate_recipe(ingredients):
         max_tokens=150,
         n=1,
         stop=None,
-        temperature=0.5,  # Adjust temperature, higher is more creative and random lower is more focused 
+        temperature=0.5,  # Adjust temperature, higher is more creative and random lower is more focused
     )
 
     recipe = response.choices[0].text.strip()
