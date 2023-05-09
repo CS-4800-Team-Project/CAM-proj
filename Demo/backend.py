@@ -7,6 +7,7 @@ import sqlite3
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import secrets
+from datetime import datetime, timedelta
 
 
 # Set up database connection
@@ -16,6 +17,14 @@ cursor = db.cursor()
 
 def init_db():
     # Create users table
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            username TEXT UNIQUE NOT NULL,
+                            email TEXT UNIQUE NOT NULL,
+                            password TEXT NOT NULL,
+                            last_recipe_generated TIMESTAMP,
+                            recipes_generated_today INTEGER DEFAULT 0)''')
+
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         username TEXT UNIQUE NOT NULL,
@@ -66,9 +75,16 @@ def search_recipes(query):
     url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&query={query}"
     response = requests.get(url)
     if response.status_code == 200:
-        return response.json()['results']
+        results = response.json()['results']
+        for result in results:
+            recipe_id = result['id']
+            cursor.execute("SELECT AVG(rating) FROM ratings WHERE recipe_id = ?", (recipe_id,))
+            average_rating = cursor.fetchone()[0]
+            result['averageRating'] = average_rating
+        return results
     else:
         return []
+
 
 def generate_recipe(ingredients):
     prompt = f"Create a delicious recipe using most the following ingredients, it is not necessarry to use all the ingridients use your best judgement: {', '.join(ingredients)}.\n\nRecipe:"
@@ -82,6 +98,7 @@ def generate_recipe(ingredients):
     )
 
     recipe = response.choices[0].text.strip()
+
     return recipe
 
 @app.route('/', methods=['GET', 'POST'])
@@ -131,30 +148,41 @@ def get_recipe_details(recipe_id):
         return None
 
 @app.route('/generated_recipe', methods=['GET'])
+@login_required
 def generated_recipe():
     if request.args.get('ingredients'):
         ingredients = request.args.get('ingredients').split(', ')
+
+        if not can_generate_recipe(current_user):
+            flash('You have reached your daily limit for recipe generation.', 'danger')
+            return redirect(url_for('index'))
+
         recipe = generate_recipe(ingredients)
         bg_image = url_for('static', filename='Food.jpg')
         return render_template('generated_recipe.html', recipe=recipe, bg_image=bg_image)
     else:
         return redirect(url_for('index'))
 
+
 class User(UserMixin):
-    def __init__(self, id, username, email, password):
+    def __init__(self, id, username, email, password, last_recipe_generated=None, recipes_generated_today=0):
         self.id = id
         self.username = username
         self.email = email
         self.password = password
+        self.last_recipe_generated = last_recipe_generated
+        self.recipes_generated_today = recipes_generated_today
+
 
 @login_manager.user_loader
 def load_user(user_id):
     cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
     result = cursor.fetchone()
     if result:
-        return User(result[0], result[1], result[2], result[3])
+        return User(result[0], result[1], result[2], result[3], result[4], result[5])
     else:
         return None
+
 
 
 
@@ -312,6 +340,14 @@ def get_favorite_recipes(user_id):
         if recipe:
             favorite_recipes.append(recipe)
     return favorite_recipes
+
+def can_generate_recipe(user):
+    if user.last_recipe_generated is None:
+        return True
+    if user.last_recipe_generated.date() != datetime.utcnow().date():
+        user.recipes_generated_today = 0
+    return user.recipes_generated_today < 5
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
