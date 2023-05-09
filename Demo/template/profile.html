@@ -23,8 +23,8 @@
             color: #fff;
         }
 
-        .btn btn-danger mt-2 {
-            padding-right: 20px
+        .btn-logout {
+            margin-left: 20px;
         }
     </style>
     <script>
@@ -63,7 +63,7 @@
         </ul>
         <div class="d-grid gap-2 d-md-flex">
         <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Menu</a>
-        <a href="{{ url_for('logout') }}" class="btn btn-danger me-auto">Logout</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger btn-logout">Logout</a>
         </div>
     </div>
 {% endblock %}
