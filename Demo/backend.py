@@ -66,9 +66,16 @@ def search_recipes(query):
     url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&query={query}"
     response = requests.get(url)
     if response.status_code == 200:
-        return response.json()['results']
+        results = response.json()['results']
+        for result in results:
+            recipe_id = result['id']
+            cursor.execute("SELECT AVG(rating) FROM ratings WHERE recipe_id = ?", (recipe_id,))
+            average_rating = cursor.fetchone()[0]
+            result['averageRating'] = average_rating
+        return results
     else:
         return []
+
 
 def generate_recipe(ingredients):
     prompt = f"Create a delicious recipe using most the following ingredients, it is not necessarry to use all the ingridients use your best judgement: {', '.join(ingredients)}.\n\nRecipe:"
