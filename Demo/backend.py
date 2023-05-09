@@ -159,10 +159,19 @@ def generated_recipe():
             return redirect(url_for('index'))
 
         recipe = generate_recipe(ingredients)
+
+        # Update the user's last_recipe_generated timestamp and recipes_generated_today counter
+        current_user.recipes_generated_today += 1
+        current_user.last_recipe_generated = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
+        cursor.execute("UPDATE users SET last_recipe_generated = ?, recipes_generated_today = ? WHERE id = ?",
+                       (current_user.last_recipe_generated, current_user.recipes_generated_today, current_user.id))
+        db.commit()
+
         bg_image = url_for('static', filename='Food.jpg')
         return render_template('generated_recipe.html', recipe=recipe, bg_image=bg_image)
     else:
         return redirect(url_for('index'))
+
 
 
 class User(UserMixin):
@@ -350,9 +359,13 @@ def get_favorite_recipes(user_id):
 def can_generate_recipe(user):
     if user.last_recipe_generated is None:
         return True
-    if user.last_recipe_generated.date() != datetime.utcnow().date():
+
+    last_recipe_generated_date = datetime.strptime(user.last_recipe_generated, '%Y-%m-%d %H:%M:%S.%f').date()
+    if last_recipe_generated_date != datetime.utcnow().date():
         user.recipes_generated_today = 0
+
     return user.recipes_generated_today < 5
+
 
 
 if __name__ == '__main__':
