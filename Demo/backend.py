@@ -102,6 +102,7 @@ def generate_recipe(ingredients):
     return recipe
 
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     logo_image = url_for('static', filename='Yum.jpg')
     if request.method == 'POST':
@@ -111,9 +112,15 @@ def index():
             return render_template('search_results.html', results=results, logo_image=logo_image, current_user=current_user)
         elif 'ingredients' in request.form:
             ingredients = request.form['ingredients'].split(', ')
+
+            if not can_generate_recipe(current_user):
+                flash('You have reached your daily limit for recipe generation.', 'danger')
+                return redirect(url_for('index'))
+
             recipe = generate_recipe(ingredients)
             return render_template('generated_recipe.html', recipe=recipe, logo_image=logo_image, current_user=current_user)
     return render_template('index.html', logo_image=logo_image, current_user=current_user)
+
 
 
 @app.route('/search', methods=['GET'])
