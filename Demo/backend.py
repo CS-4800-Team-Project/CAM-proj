@@ -183,12 +183,17 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-    result = cursor.fetchone()
-    if result:
+    conn = sqlite3.connect('users.db')
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM users WHERE id=?', (user_id,))
+    result = cur.fetchone()
+    conn.close()
+
+    if result and len(result) == 6:
         return User(result[0], result[1], result[2], result[3], result[4], result[5])
     else:
         return None
+
 
 
 
